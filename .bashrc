@@ -113,6 +113,3 @@ if ! shopt -oq posix; then
 fi
 
 cd ~/dev/
-
-# export PATH=$PATH:/usr/lib/jvm/jdk-17.0.1/bin/
-# export PATH="$HOME/opt/gcc-11.2.0/bin:$PATH"

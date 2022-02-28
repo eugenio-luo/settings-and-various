@@ -14,6 +14,34 @@
 (setq-default explicit-shell-file-name "/bin/bash")
 (set-frame-font "Iosevka" nil t)
 
+;; Set up package.el to work with MELPA
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
+;; Requirements
+;;(unless (package-installed-p 'flycheck))
+;;  (package-install 'flycheck)
+;;(unless (package-installed-p 'gruber-darker-theme))
+;;  (package-install 'gruber-darker-theme)
+;;(unless (package-installed-p 'company-irony))
+;;  (package-install 'company-irony)
+;;(unless (package-installed-p 'irony))
+;;  (package-install 'irony)
+;;(unless (package-installed-p 'flycheck-irony))
+;;  (package-install 'flycheck-irony)
+;;(unless (package-installed-p 'evil)
+;;  (package-install 'evil))
+;;(unless (package-installed-p 'linum-relative))
+;;  (package-install 'linum-relative)
+
+(require 'company-irony)
+(add-hook 'after-init-hook 'global-company-mode)
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-irony))
+
+(require 'irony)
 (add-hook 'window-setup-hook 'delete-other-windows)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
@@ -21,44 +49,13 @@
 
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
-(add-hook 'after-init-hook 'global-company-mode)
-(eval-after-load 'company
-  '(add-to-list 'company-backends 'company-irony))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-enabled-themes '(gruber-darker))
- '(custom-safe-themes
-   '("03e26cd42c3225e6376d7808c946f7bed6382d795618a82c8f3838cd2097a9cc" default))
- '(package-selected-packages
-   '(gruber-darker-theme haskell-mode company-irony company flycheck-irony irony auto-complete linum-relative evil flycheck use-package)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-(package-initialize)
-
-;; to reactivate flycheck ->
+(require 'flycheck)
 (global-flycheck-mode 1)
+(global-flycheck-mode 1)
+
+(require 'flycheck-irony)
 (eval-after-load 'flycheck
   '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-
-(evil-mode 1)
-
-(linum-relative-global-mode)
-(setq-default linum-relative-current-symbol "")
 
 (define-globalized-minor-mode real-global-auto-complete-mode
   auto-complete-mode (lambda ()
@@ -66,3 +63,26 @@
                          (auto-complete-mode 1))
                        ))
 (put 'upcase-region 'disabled nil)
+
+
+(require 'evil)
+(evil-mode 1)
+
+(require 'linum-relative)
+(linum-relative-global-mode)
+(setq-default linum-relative-current-symbol "")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(gruber-darker))
+ '(custom-safe-themes
+   '("3d2e532b010eeb2f5e09c79f0b3a277bfc268ca91a59cdda7ffd056b868a03bc" default))
+ '(package-selected-packages '(linum-relative irony gruber-darker-theme evil)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
